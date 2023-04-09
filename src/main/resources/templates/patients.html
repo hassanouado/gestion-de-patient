@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="template">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.2.3/css/bootstrap.min.css">
+</head>
+<body>
+<div layout:fragment="content1">
+<div class="container mt-2">
+    <div class="card">
+        <div class="card-header">
+          LIstes des patients
+        </div>
+        <div class="card-body">
+            <form method="get" th:action="@{/user/index}">
+                <label>key word</label>
+                <input type="text" name="keyword" th:value="${keyword}">
+                <button type="submit" class="btn btn-primary">Chercher</button>
+            </form>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Id</th><th>Nom</th><th>DateNaissance</th><th>Ismalade</th><th>Score</th>
+                </tr>
+
+                </thead>
+                <tbody>
+                <tr th:each="p:${listPatients}">
+                    <td th:text="${p.getId()}"></td>
+                    <td th:text="${p.getNom()}"></td>
+                    <td th:text="${p.getDatenaissance()}"></td>
+                    <td th:text="${p.isMalade()}"></td>
+                    <td th:text="${p.getScore()}"></td>
+                    <td>
+                        <a onclick="return confirm('etes vous sure?')" class="btn btn-danger" th:href="@{/admin/delete(id=${p.id},keyword=${keyword},page=${pageCourrent})}">Delete</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-success" th:href="@{/admin/editPatient(id=${p.id},keyword=${keyword},page=${pageCourrent})}">Edit</a>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+            <ul class="nav nav-pills">
+                <li th:each="page,status:${pages}">
+                    <a th:class="${status.index==pageCourrent?'btn btn-info ms-1':'btn btn-outline-info ms-1'}"
+                       th:text="${status.index}" th:href="@{/user/index(page=${status.index},keyword=${keyword})}" ></a>
+                </li>
+            </ul>
+
+        </div>
+
+    </div>
+
+</div>
+</div>
+</body>
+</html>
